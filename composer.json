@@ -1,0 +1,15 @@
+{
+    "name": "felds/size-str-to-bytes",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Felds Liscia",
+            "email": "dev@felds.com.br"
+        }
+    ],
+    "require": {}
+}
