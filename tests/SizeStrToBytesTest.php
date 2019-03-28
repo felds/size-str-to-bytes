@@ -1,28 +1,46 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+use Felds\SizeStrToBytes\Exception\BadFormat;
 use Felds\SizeStrToBytes\SizeStrToBytes;
+use PHPUnit\Framework\TestCase;
 
 class SizeStrToBytesTest extends TestCase
 {
-
     /**
      * @dataProvider getNaked
      */
-    public function test_naked_bytes($str, $bytes)
+    public function testNakedBytes($str, $bytes)
     {
         $this->assertSame($bytes, SizeStrToBytes::convert($str));
     }
 
     /**
-     * @dataProvider getKilobytes
+     * @dataProvider getUnits
      */
-    function testKilobytes($str, $bytes) {
-        self::markTestSkipped();
-        // $this->assertEquals($bytes, SizeStrToBytes::convert($str));
+    function testUnits($str, $bytes)
+    {
+        $this->assertEquals($bytes, SizeStrToBytes::convert($str));
     }
 
-    public function getKilobytes()
+    function testBadFormat2() {
+        $this->expectException(BadFormat::class);
+        SizeStrToBytes::convert("");
+    }
+
+    function testBadFormat() {
+        $this->expectException(BadFormat::class);
+        SizeStrToBytes::convert("12X");
+    }
+
+    public function getNaked()
+    {
+        return [
+            ['0', 0],
+            ['1234', 1234],
+        ];
+    }
+
+    public function getUnits()
     {
         return [
             ['0k', 0],
@@ -31,14 +49,24 @@ class SizeStrToBytesTest extends TestCase
             ['2k', 2 * 1024],
             ['1000K', 1000 * 1024],
             ['29834k', 29834 * 1024],
+            ['0M', 0],
+            ['1M', 1024 * 1024],
+            ['1000M', 1000 * 1024 ** 2],
+            ['34985M', 34985 * 1024 ** 2],
+            ['54G', 54 * 1024 ** 3],
+            ['987T', 987 * 1024 ** 4],
+            ['12P', 12 * 1024 ** 5],
+            ['1E', 1 * 1024 ** 6],
         ];
     }
 
-    public function getNaked()
-    {
+    public function getBadFormats() {
         return [
-            ['0', 0],
-            ['1234', 1234],
+            'ABC',
+            'K',
+            '0X',
+            '-123',
+            '',
         ];
     }
 }
