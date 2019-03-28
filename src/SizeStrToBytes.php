@@ -5,5 +5,8 @@ namespace Felds\SizeStrToBytes;
 
 class SizeStrToBytes
 {
-
+    public static function convert(string $str): int
+    {
+        return intval($str);
+    }
 }
